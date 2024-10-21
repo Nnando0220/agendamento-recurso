@@ -1,0 +1,624 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Gerenciamento",
+    "version": "1.0.0",
+    "description": "Documentação da API para gerenciamento de usuários, recursos e agendamentos"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/login": {
+      "post": {
+        "summary": "Realiza o login de um usuário.",
+        "description": "Autentica o usuário com e-mail e senha.",
+        "tags": ["Usuários"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "usuario@email.com",
+                  "password": "senha123"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login realizado com sucesso."
+            },
+            "400": {
+              "description": "Requisição inválida."
+            },
+            "401": {
+              "description": "Usuário não autorizado."
+            }
+          }
+        }
+      }
+    },
+    "/api/cadastro": {
+      "post": {
+        "summary": "Realiza o cadastro de um novo usuário.",
+        "description": "Cria um novo usuário com as informações fornecidas.",
+        "tags": ["Usuários"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "Nome do Usuário",
+                  "email": "usuario@email.com",
+                  "password": "senha123"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Usuário cadastrado com sucesso."
+            },
+            "400": {
+              "description": "Requisição inválida."
+            }
+          }
+        }
+      }
+    },
+    "/api/usuario/agendamentos": {
+      "get": {
+        "summary": "Retorna os agendamentos de um usuário autenticado.",
+        "description": "Recupera todos os agendamentos feitos pelo usuário.",
+        "tags": ["Usuários"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de agendamentos do usuário."
+          },
+          "401": {
+            "description": "Usuário não autorizado."
+          }
+        }
+      }
+    },
+    "/api/usuarios": {
+      "get": {
+        "summary": "Retorna todos os usuários (admin).",
+        "description": "Recupera a lista de todos os usuários registrados. Apenas administradores têm permissão.",
+        "tags": ["Usuários (Admin)"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários."
+          },
+          "401": {
+            "description": "Não autorizado."
+          }
+        }
+      }
+    },
+    "/api/usuario/{id}": {
+      "get": {
+        "summary": "Retorna os detalhes de um usuário por ID (admin).",
+        "description": "Recupera os detalhes de um usuário específico. Apenas administradores têm permissão.",
+        "tags": ["Usuários (Admin)"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do usuário."
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "401": {
+            "description": "Não autorizado."
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualiza os detalhes de um usuário por ID (admin).",
+        "description": "Atualiza as informações de um usuário específico. Apenas administradores têm permissão.",
+        "tags": ["Usuários (Admin)"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "Novo Nome",
+                  "email": "novoemail@email.com"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Usuário atualizado com sucesso."
+            },
+            "400": {
+              "description": "Requisição inválida."
+            },
+            "404": {
+              "description": "Usuário não encontrado."
+            },
+            "401": {
+              "description": "Não autorizado."
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um usuário por ID (admin).",
+        "description": "Exclui um usuário específico. Apenas administradores têm permissão.",
+        "tags": ["Usuários (Admin)"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário excluído com sucesso."
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "401": {
+            "description": "Não autorizado."
+          }
+        }
+      }
+    },
+    "/api/recurso": {
+      "post": {
+        "summary": "Cria um novo recurso (admin).",
+        "description": "Adiciona um novo recurso ao sistema.",
+        "tags": ["Recursos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "Recurso A",
+                  "descricao": "Descrição do recurso A"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Recurso criado com sucesso."
+            },
+            "401": {
+              "description": "Não autorizado."
+            }
+          }
+        }
+      }
+    },
+    "/api/recursos": {
+      "get": {
+        "summary": "Retorna todos os recursos.",
+        "description": "Recupera a lista de todos os recursos disponíveis.",
+        "tags": ["Recursos"],
+        "responses": {
+          "200": {
+            "description": "Lista de recursos."
+          }
+        }
+      }
+    },
+    "/api/recurso/{id}": {
+      "get": {
+        "summary": "Retorna os detalhes de um recurso por ID.",
+        "description": "Recupera os detalhes de um recurso específico.",
+        "tags": ["Recursos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do recurso"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do recurso."
+          },
+          "404": {
+            "description": "Recurso não encontrado."
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualiza os detalhes de um recurso por ID (admin).",
+        "description": "Atualiza as informações de um recurso específico. Apenas administradores têm permissão.",
+        "tags": ["Recursos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do recurso"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "Novo Nome do Recurso",
+                  "descricao": "Nova descrição do recurso"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Recurso atualizado com sucesso."
+            },
+            "404": {
+              "description": "Recurso não encontrado."
+            },
+            "401": {
+              "description": "Não autorizado."
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um recurso por ID (admin).",
+        "description": "Exclui um recurso específico. Apenas administradores têm permissão.",
+        "tags": ["Recursos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do recurso"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recurso excluído com sucesso."
+          },
+          "404": {
+            "description": "Recurso não encontrado."
+          },
+          "401": {
+            "description": "Não autorizado."
+          }
+        }
+      }
+    },
+    "/api/recurso/{id}/agendamentos": {
+      "get": {
+        "summary": "Retorna os agendamentos de um recurso por ID.",
+        "description": "Recupera todos os agendamentos associados a um recurso específico.",
+        "tags": ["Recursos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do recurso"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de agendamentos do recurso."
+          },
+          "404": {
+            "description": "Recurso não encontrado."
+          }
+        }
+      }
+    },
+    "/api/agendamento": {
+      "post": {
+        "summary": "Cria um novo agendamento.",
+        "description": "Adiciona um novo agendamento ao sistema.",
+        "tags": ["Agendamentos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recursoId": {
+                    "type": "string"
+                  },
+                  "dataHora": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "example": {
+                  "recursoId": "id_do_recurso",
+                  "dataHora": "2024-10-20T10:00:00Z"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Agendamento criado com sucesso."
+            },
+            "401": {
+              "description": "Não autorizado."
+            }
+          }
+        }
+      }
+    },
+    "/api/agendamentos": {
+      "get": {
+        "summary": "Retorna todos os agendamentos.",
+        "description": "Recupera a lista de todos os agendamentos disponíveis.",
+        "tags": ["Agendamentos"],
+        "responses": {
+          "200": {
+            "description": "Lista de agendamentos."
+          }
+        }
+      }
+    },
+    "/api/agendamento/{id}": {
+      "get": {
+        "summary": "Retorna os detalhes de um agendamento por ID.",
+        "description": "Recupera os detalhes de um agendamento específico.",
+        "tags": ["Agendamentos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do agendamento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do agendamento."
+          },
+          "404": {
+            "description": "Agendamento não encontrado."
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualiza os detalhes de um agendamento por ID.",
+        "description": "Atualiza as informações de um agendamento específico.",
+        "tags": ["Agendamentos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do agendamento"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dataHora": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "example": {
+                  "dataHora": "2024-10-20T11:00:00Z"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Agendamento atualizado com sucesso."
+            },
+            "404": {
+              "description": "Agendamento não encontrado."
+            },
+            "401": {
+              "description": "Não autorizado."
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um agendamento por ID.",
+        "description": "Exclui um agendamento específico.",
+        "tags": ["Agendamentos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do agendamento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agendamento excluído com sucesso."
+          },
+          "404": {
+            "description": "Agendamento não encontrado."
+          },
+          "401": {
+            "description": "Não autorizado."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
